@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynasty 8 Real Estate | LSE · Trouvez votre propriété à Los Santos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1116;--card:#161b24;--card2:#1b212c;--line:#252c39;--green:#6cc329;--green2:#4fa01a;--text:#e9ecf1;--mute:#8e97a6}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Outfit,system-ui,sans-serif;min-height:100vh;border-top:4px solid var(--green)}
+button,input,select,textarea{font:inherit;color:inherit}
+svg{width:1.1em;height:1.1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+header{background:#12161d;border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;color:var(--green)}
+.logo svg{width:40px;height:40px;stroke-width:1.8}
+.logo b{display:block;color:#fff;font-size:22px;font-weight:800;letter-spacing:.5px;line-height:1}
+.logo b i{color:var(--green);font-style:normal}
+.logo small{display:block;color:var(--mute);font-size:10px;letter-spacing:3px;margin-top:4px}
+.budget{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 14px;height:40px;font-size:14px;color:var(--mute)}
+.budget input{background:none;border:0;outline:0;width:110px;color:var(--green);font-weight:700;font-size:16px}
+.hero{position:relative;text-align:center;padding:84px 20px 96px;border-bottom:3px solid var(--green);background:linear-gradient(180deg,rgba(14,17,22,.55),rgba(14,17,22,.95)),url(img/hero.jpg) center/cover,radial-gradient(circle at 20% 20%,#1f3a22,#0e1116 70%)}
+.hero h1{font-size:clamp(28px,4.4vw,42px);font-weight:800;line-height:1.15}
+.hero h1 span{color:var(--green)}
+.hero p{margin-top:12px;color:#c3c9d3;font-size:15px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:-52px;position:relative}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{display:flex;align-items:center;gap:8px;background:none;border:0;border-radius:10px;padding:12px 16px;color:var(--mute);font-weight:500;cursor:pointer}
+.tab:hover{color:#fff}
+.tab.on{background:var(--green);color:#0b1306;font-weight:700;box-shadow:0 0 18px rgba(108,195,41,.35)}
+.tools{display:flex;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.search{flex:1;display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0 14px;color:var(--mute)}
+.search input{flex:1;background:none;border:0;outline:0;height:44px;font-size:14px}
+select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0 12px;height:44px;font-size:14px}
+.meta{display:flex;justify-content:space-between;align-items:center;margin:28px 0 18px;font-size:14px;font-weight:600;color:#c3c9d3}
+.pill{display:flex;align-items:center;gap:6px;color:var(--green);border:1px solid #2c4a1c;background:#16240f;border-radius:8px;padding:8px 12px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:22px;padding-bottom:60px}
+.card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.pic{position:relative;height:180px;background:linear-gradient(135deg,#1b2a1c,#12161d)}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.pic.noimg img{display:none}
+.pic.noimg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(108,195,41,.18),transparent 60%)}
+.tag{position:absolute;top:12px;left:12px;z-index:1;background:#000;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;padding:6px 10px;border-radius:5px}
+.ok{position:absolute;top:12px;right:12px;z-index:1;display:flex;align-items:center;gap:5px;background:var(--green2);color:#fff;font-size:11px;font-weight:700;padding:6px 10px;border-radius:5px}
+.body{padding:18px;display:flex;flex-direction:column;flex:1}
+.body h3{font-size:17px;font-weight:700}
+.body p{margin-top:8px;color:var(--mute);font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cap{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:14px;border-top:1px solid var(--line);color:var(--mute);font-size:12px}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+.price{color:var(--green);font-size:22px;font-weight:800}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#0b1306;border:0;border-radius:8px;padding:11px 16px;font-weight:700;font-size:13px;cursor:pointer}
+.btn:hover{background:#7fd53a}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:50px 0}
+footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--mute);font-size:13px}
+footer b{color:#fff}
+footer i{color:var(--green);font-style:normal}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.ov.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:18px;width:100%;max-width:880px;max-height:92vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr;position:relative}
+.modal .pic{height:100%;min-height:260px}
+.mb{padding:26px}
+.mb .tag{position:static;display:inline-block}
+.mb h2{font-size:26px;margin:12px 0 4px}
+.mb .price{font-size:26px}
+.mb p{color:#c3c9d3;font-size:14px;line-height:1.6;margin:14px 0}
+.mb h4{font-size:12px;letter-spacing:1.5px;color:var(--mute);text-transform:uppercase;margin:16px 0 8px}
+.mb ul{list-style:none;padding:0;display:grid;gap:6px;font-size:13px}
+.mb li{display:flex;gap:8px;align-items:center}
+.mb li svg{color:var(--green)}
+.x{position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;font-size:18px}
+form{grid-column:1/-1;padding:0 26px 26px;display:grid;gap:12px}
+form h4{margin-top:4px}
+form input,form textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;outline:0}
+form input:focus,form textarea:focus{border-color:var(--green)}
+form label{font-size:12px;color:var(--mute)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#msg{font-size:13px;min-height:18px}
+@media(max-width:760px){.modal{grid-template-columns:1fr}.modal .pic{min-height:180px;height:200px}.two{grid-template-columns:1fr}.tools{flex-direction:column}.tab{padding:10px 12px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8M5 10v10h14V10M10 20v-6h4v6"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+<symbol id="i-car" viewBox="0 0 24 24"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M7 17v2M17 17v2M7 13h.01M17 13h.01"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M3 9 12 4l9 5v11H3zM7 20v-7h10v7M7 16h10"/></symbol>
+<symbol id="i-bld" viewBox="0 0 24 24"><rect x="4" y="3" width="10" height="18" rx="1"/><path d="M14 9h6v12h-6M8 7h2M8 11h2M8 15h2M17 13h.01M17 17h.01"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7h14a2 2 0 0 1 2 2v10H6a2 2 0 0 1-2-2zM4 7a2 2 0 0 1 2-2h10M16 13h.01"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-size" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+</defs></svg>
+
+<header><div class="wrap">
+  <div class="logo"><svg><use href="#i-home"/></svg><div><b>DYNASTY <i>8</i></b><small>REAL ESTATE</small></div></div>
+  <label class="budget"><svg><use href="#i-wallet"/></svg>Mon Budget : <span style="color:var(--green);font-weight:700">$</span><input id="budget" inputmode="numeric" autocomplete="off" aria-label="Mon budget"></label>
+</div></header>
+
+<section class="hero">
+  <h1>Trouvez une maison de rêve<br><span>ou du moins abordable.</span></h1>
+  <p>Le leader de l’immobilier résidentiel et commercial à Los Santos et Blaine County.</p>
+</section>
+
+<main class="wrap">
+  <div class="panel">
+    <div class="tabs" id="tabs"></div>
+    <div class="tools">
+      <label class="search"><svg><use href="#i-search"/></svg><input id="q" placeholder="Rechercher par nom (ex: Villa, Garage)…"></label>
+      <select id="sort" aria-label="Tri"><option value="">Tri par défaut</option><option value="asc">Prix : croissant</option><option value="desc">Prix : décroissant</option><option value="az">Nom : A-Z</option></select>
+    </div>
+  </div>
+  <div class="meta"><span id="count"></span><span class="pill"><svg><use href="#i-check"/></svg><span id="aff"></span></span></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer><div class="wrap"><b>DYNASTY <i>8</i></b><br>We’ll find you a home to dream of (or at least afford).<br><br>© 2026 Dynasty 8 Real Estate · Los Santos Extended. Tous droits réservés.</div></footer>
+
+<div class="ov" id="ov" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-name">
+  <button class="x" id="x" aria-label="Fermer">✕</button>
+  <div class="pic" id="m-pic"></div>
+  <div class="mb">
+    <span class="tag" id="m-tag"></span><h2 id="m-name"></h2><div class="price" id="m-price"></div>
+    <div class="cap" style="border:0;margin-top:8px;padding:0"><svg><use href="#i-size"/></svg><span id="m-cap"></span></div>
+    <p id="m-desc"></p><h4>Prestations incluses</h4><ul id="m-feat"></ul>
+  </div>
+  <form id="f"><h4>Demande d’acquisition</h4>
+    <div class="two"><div><label for="f-name">Nom RP / Identité</label><input id="f-name" required maxlength="80"></div><div><label for="f-tel">N° Téléphone</label><input id="f-tel" required maxlength="30"></div></div>
+    <div><label for="f-note">Notes ou demandes particulières (optionnel)</label><textarea id="f-note" rows="3" maxlength="500"></textarea></div>
+    <button class="btn" style="justify-content:center;padding:14px" type="submit">Envoyer la demande d’achat</button><div id="msg" role="status"></div>
+  </form>
+</div></div>
+
+<script>
+/* ============ CONFIGURATION ============ */
+const CONFIG = {
+  webhookUrl: "",          // URL du webhook Discord qui reçoit les demandes d'achat
+  defaultBudget: 1500000
+};
+const CATS = {
+  all:{label:"Tout Voir",icon:"i-grid"},
+  residence:{label:"Villas & Apparts",icon:"i-home",tag:"RÉSIDENCE"},
+  garage:{label:"Garages",icon:"i-car",tag:"GARAGE"},
+  entrepot:{label:"Entrepôts",icon:"i-box",tag:"ENTREPÔT"},
+  bureau:{label:"Bureaux & QG",icon:"i-bld",tag:"BUREAU"}
+};
+/* Une propriété = un bloc. Pour l'image, dépose le fichier dans le dossier img/ avec le nom indiqué. */
+const PROPERTIES = [
+  {cat:"garage",name:"Garage 2 Places",price:100000,capacity:"2 Véhicules",img:"img/garage-2-places.jpg",
+   desc:"Petit garage de quartier, idéal pour garer vos premiers véhicules à l’abri des intempéries et des regards indiscrets.",
+   features:["Places pour 2 véhicules","Abri couvert","Accès sécurisé"]},
+  {cat:"garage",name:"Garage 6 Places",price:250000,capacity:"6 Véhicules",img:"img/garage-6-places.jpg",
+   desc:"Un garage de taille moyenne offrant un excellent compromis. Parfait pour les amateurs de tuning et les petites collections.",
+   features:["Places pour 6 véhicules","Espace atelier","Accès sécurisé"]},
+  {cat:"garage",name:"Garage 10 Places",price:350000,capacity:"10 Véhicules",img:"img/garage-10-places.jpg",
+   desc:"Grand garage haut de gamme avec sol en résine blanche et éclairage LED moderne. La référence pour tout collectionneur exigeant.",
+   features:["Places pour 10 véhicules","Sol en résine blanche","Éclairage LED"]},
+  {cat:"residence",name:"Chambre",price:100000,capacity:"1 personne",img:"img/chambre.jpg",
+   desc:"Une petite chambre individuelle modeste mais fonctionnelle. L’essentiel pour démarrer votre nouvelle vie à Los Santos.",
+   features:["Couchage individuel","Rangement","Accès indépendant"]},
+  {cat:"residence",name:"Appartement",price:150000,capacity:"1-2 personnes",img:"img/appartement.jpg",
+   desc:"Appartement citadin standard offrant un séjour confortable au cœur de la métropole. Cuisine équipée et salle de bain privative.",
+   features:["Séjour","Cuisine équipée","Salle de bain privative"]},
+  {cat:"residence",name:"Appartement Bordélique",price:200000,capacity:"1-2 personnes",img:"img/appartement-bordelique.jpg",
+   desc:"Un appartement spacieux mais quelque peu négligé. Parfait pour les artistes, les hackers ou toute personne ayant besoin de place et de discrétion.",
+   features:["Grand volume","Poste de travail","Discrétion"]}
+  /* Ajoute ici les autres propriétés (villas, entrepôts, bureaux & QG...) sur le même modèle. */
+];
+
+/* ============ LOGIQUE ============ */
+const $ = s => document.querySelector(s);
+const fmt = n => "$" + Number(n).toLocaleString("fr-FR").replace(/\s/g," ");
+const state = {cat:"all",q:"",sort:"",budget:CONFIG.defaultBudget,current:null};
+try{ const b = parseInt(localStorage.getItem("d8-budget"),10); if(b>0) state.budget=b; }catch(e){}
+
+const tabs = $("#tabs");
+tabs.innerHTML = Object.entries(CATS).map(([k,c])=>`<button class="tab${k==="all"?" on":""}" data-c="${k}"><svg><use href="#${c.icon}"/></svg>${c.label}</button>`).join("");
+tabs.addEventListener("click",e=>{
+  const t=e.target.closest(".tab"); if(!t) return;
+  state.cat=t.dataset.c; tabs.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b===t)); render();
+});
+$("#q").addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase();render()});
+$("#sort").addEventListener("change",e=>{state.sort=e.target.value;render()});
+const bi=$("#budget");
+bi.value = state.budget.toLocaleString("fr-FR").replace(/\s/g," ");
+bi.addEventListener("input",()=>{
+  const v=parseInt(bi.value.replace(/\D/g,""),10)||0;
+  state.budget=v; bi.value=v?v.toLocaleString("fr-FR").replace(/\s/g," "):"";
+  try{localStorage.setItem("d8-budget",String(v))}catch(e){}
+  render();
+});
+
+function pic(p,extra){
+  return `<div class="pic">${extra||""}<img src="${p.img}" alt="${p.name}" loading="lazy"></div>`;
+}
+function hookImages(root){
+  root.querySelectorAll(".pic img").forEach(i=>{
+    const f=()=>i.parentElement.classList.add("noimg");
+    i.addEventListener("error",f); if(i.complete&&!i.naturalWidth) f();
+  });
+}
+function render(){
+  let list = PROPERTIES.filter(p=>(state.cat==="all"||p.cat===state.cat)&&(!state.q||p.name.toLowerCase().includes(state.q)));
+  if(state.sort==="asc") list.sort((a,b)=>a.price-b.price);
+  if(state.sort==="desc") list.sort((a,b)=>b.price-a.price);
+  if(state.sort==="az") list.sort((a,b)=>a.name.localeCompare(b.name,"fr"));
+  const aff = list.filter(p=>p.price<=state.budget).length;
+  $("#count").textContent = `${list.length} propriété(s) trouvée(s)`;
+  $("#aff").textContent = `${aff} abordable(s)`;
+  const g=$("#grid");
+  g.innerHTML = list.length ? list.map(p=>{
+    const ok = p.price<=state.budget;
+    return `<article class="card">${pic(p,`<span class="tag">${CATS[p.cat].tag}</span>${ok?`<span class="ok"><svg><use href="#i-check"/></svg>Abordable</span>`:""}`)}
+    <div class="body"><h3>${p.name}</h3><p>${p.desc}</p>
+    <div class="cap"><svg><use href="#i-size"/></svg>${p.capacity}</div>
+    <div class="row"><span class="price">${fmt(p.price)}</span><button class="btn" data-i="${PROPERTIES.indexOf(p)}">Consulter <svg><use href="#i-arrow"/></svg></button></div></div></article>`;
+  }).join("") : `<div class="empty">Aucune propriété ne correspond à votre recherche.</div>`;
+  hookImages(g);
+}
+$("#grid").addEventListener("click",e=>{const b=e.target.closest("[data-i]"); if(b) openModal(PROPERTIES[b.dataset.i]);});
+
+function openModal(p){
+  state.current=p;
+  $("#m-pic").outerHTML = pic(p).replace('class="pic"','class="pic" id="m-pic"');
+  hookImages($("#ov"));
+  $("#m-tag").textContent=CATS[p.cat].tag; $("#m-name").textContent=p.name; $("#m-price").textContent=fmt(p.price);
+  $("#m-cap").textContent=p.capacity; $("#m-desc").textContent=p.desc;
+  $("#m-feat").innerHTML=p.features.map(f=>`<li><svg><use href="#i-check"/></svg>${f}</li>`).join("");
+  $("#msg").textContent=""; $("#f").reset();
+  $("#ov").classList.add("open"); $("#ov").setAttribute("aria-hidden","false"); $("#f-name").focus();
+}
+function closeModal(){$("#ov").classList.remove("open");$("#ov").setAttribute("aria-hidden","true")}
+$("#x").addEventListener("click",closeModal);
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+$("#f").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const p=state.current, msg=$("#msg"), btn=e.target.querySelector("button");
+  if(!CONFIG.webhookUrl){msg.style.color="#e8b04b";msg.textContent="Envoi indisponible pour le moment.";return;}
+  btn.disabled=true; msg.style.color="var(--mute)"; msg.textContent="Envoi en cours…";
+  const body={embeds:[{title:"Nouvelle demande d’acquisition",color:7062185,
+    fields:[{name:"Propriété",value:`${p.name} (${fmt(p.price)})`},
+            {name:"Identité",value:$("#f-name").value.slice(0,80),inline:true},
+            {name:"Téléphone",value:$("#f-tel").value.slice(0,30),inline:true},
+            {name:"Notes",value:$("#f-note").value.trim().slice(0,500)||"Aucune"}],
+    timestamp:new Date().toISOString()}]};
+  try{
+    const r=await fetch(CONFIG.webhookUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!r.ok) throw new Error(r.status);
+    msg.style.color="var(--green)"; msg.textContent="Demande envoyée. Un agent Dynasty 8 vous recontactera.";
+    e.target.reset();
+  }catch(err){ msg.style.color="#e86a5a"; msg.textContent="Échec de l’envoi, réessayez dans un instant."; }
+  btn.disabled=false;
+});
+render();
+</script>
+</body>
+</html>
