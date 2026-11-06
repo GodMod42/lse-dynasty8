@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espace agent | Dynasty 8 Real Estate</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1116;--card:#161b24;--line:#252c39;--green:#6cc329;--text:#e9ecf1;--mute:#8e97a6}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font-family:Outfit,system-ui,sans-serif;min-height:100vh;border-top:4px solid var(--green)}
+button,input,select{font:inherit;color:inherit}
+header{background:#12161d;border-bottom:1px solid var(--line)}
+.w{max-width:1000px;margin:0 auto;padding:0 20px}
+header .w{display:flex;justify-content:space-between;align-items:center;height:68px}
+.logo{font-weight:800;font-size:20px;letter-spacing:.5px}.logo i{color:var(--green);font-style:normal}.logo small{color:var(--mute);font-weight:500;font-size:11px;letter-spacing:2px;margin-left:8px}
+a.back,.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:8px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer;border:0;text-decoration:none}
+a.back{background:var(--card);border:1px solid var(--line);color:#fff;font-weight:600}
+.btn{background:var(--green);color:#0b1306}.btn.g{background:var(--card);border:1px solid var(--line);color:#fff;font-weight:600}.btn.r{background:#3a1717;color:#ff8a8a}
+.login{max-width:400px;margin:70px auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px}
+.login small{color:var(--green);font-weight:700;letter-spacing:1.5px;font-size:11px}
+h1{font-size:26px;margin:6px 0 8px}.sub{color:var(--mute);font-size:14px;line-height:1.5;margin-bottom:20px}
+label{display:block;font-size:12px;color:var(--mute);margin:12px 0 6px}
+input,select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;outline:0;font-size:14px}input:focus{border-color:var(--green)}
+.login .btn{width:100%;margin-top:18px;padding:13px}
+.link{background:none;border:0;color:var(--mute);font-size:13px;margin-top:14px;cursor:pointer;text-decoration:underline}
+#err,#hint{font-size:13px;margin-top:12px;min-height:16px}#err{color:#ff6b6b}#hint{color:var(--mute)}
+.bar{display:flex;gap:10px;align-items:center;margin:28px 0 18px}.bar h1{flex:1;margin:0;font-size:22px}.bar select{width:auto}
+.req{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:12px;padding:16px 18px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:12px}
+.req.done{border-left-color:#555;opacity:.7}
+.req b{font-size:16px}.req .p{color:var(--green);font-weight:700;margin-left:8px}
+.req div div{font-size:13px;color:var(--mute);margin-top:5px;line-height:1.5}.req div div span{color:var(--text)}
+.act{display:flex;flex-direction:column;gap:8px}
+.st{font-size:11px;font-weight:700;border-radius:5px;padding:3px 8px;margin-left:8px;background:#1e3314;color:var(--green)}.done .st{background:#2a2f38;color:var(--mute)}
+.empty{text-align:center;color:var(--mute);padding:50px 0}
+[hidden]{display:none!important}
+@media(max-width:640px){.req{grid-template-columns:1fr}.act{flex-direction:row}}
+</style></head><body>
+<header><div class="w"><div class="logo">DYNASTY <i>8</i><small>ESPACE AGENT</small></div><a class="back" href="index.html">Retour au site</a></div></header>
+
+<form class="login" id="login" hidden>
+  <small>ACCÈS RÉSERVÉ</small><h1>Connexion agent</h1>
+  <p class="sub">Consultez et gérez les demandes d’acquisition reçues depuis le site Dynasty 8.</p>
+  <label for="em">Adresse e-mail</label><input id="em" type="email" autocomplete="username" required>
+  <label for="pw">Mot de passe</label><input id="pw" type="password" autocomplete="current-password" required>
+  <button class="btn" type="submit">Se connecter</button>
+  <button class="link" type="button" id="forgot">Mot de passe oublié ?</button>
+  <div id="err"></div><div id="hint"></div>
+</form>
+
+<main class="w" id="dash" hidden>
+  <div class="bar"><h1 id="title">Demandes reçues</h1>
+    <select id="flt"><option value="all">Toutes</option><option value="new">Nouvelles</option><option value="done">Traitées</option></select>
+    <button class="btn g" id="ref">Actualiser</button><button class="btn g" id="out">Déconnexion</button></div>
+  <div id="list"></div>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+let all = [];
+async function api(method, body){
+  const r = await fetch("/api/agent", {method, headers:{"Content-Type":"application/json"}, body: body?JSON.stringify(body):undefined});
+  let j = {}; try{ j = await r.json(); }catch(e){}
+  return {ok:r.ok, status:r.status, data:j};
+}
+function show(logged){ $("#login").hidden = logged; $("#dash").hidden = !logged; }
+async function load(){
+  const r = await api("GET");
+  if(!r.ok){ show(false); return; }
+  all = r.data.requests; show(true); draw();
+}
+function draw(){
+  const f = $("#flt").value, box = $("#list"); box.replaceChildren();
+  const rows = all.filter(x => f==="all" || x.status===f);
+  $("#title").textContent = `Demandes reçues (${rows.length})`;
+  if(!rows.length){ const e=document.createElement("div"); e.className="empty"; e.textContent="Aucune demande pour le moment."; box.append(e); return; }
+  rows.forEach(x=>{
+    const c=document.createElement("div"); c.className="req"+(x.status==="done"?" done":"");
+    const l=document.createElement("div");
+    const t=document.createElement("b"); t.textContent=x.property;
+    const p=document.createElement("span"); p.className="p"; p.textContent="$"+Number(x.price).toLocaleString("fr-FR");
+    const s=document.createElement("span"); s.className="st"; s.textContent=x.status==="done"?"TRAITÉE":"NOUVELLE";
+    const line=(k,v)=>{const d=document.createElement("div"); d.append(k+" : "); const sp=document.createElement("span"); sp.textContent=v; d.append(sp); return d;};
+    l.append(t,p,s,line("Identité",x.name),line("Téléphone",x.tel),line("Notes",x.note||"Aucune"),line("Reçue le",new Date(x.date).toLocaleString("fr-FR")));
+    const a=document.createElement("div"); a.className="act";
+    const b1=document.createElement("button"); b1.className="btn"; b1.textContent=x.status==="done"?"Rouvrir":"Marquer traitée";
+    b1.onclick=async()=>{await api("POST",{action:"status",id:x.id,status:x.status==="done"?"new":"done"});load();};
+    const b2=document.createElement("button"); b2.className="btn r"; b2.textContent="Supprimer";
+    b2.onclick=async()=>{if(confirm("Supprimer cette demande ?")){await api("POST",{action:"delete",id:x.id});load();}};
+    a.append(b1,b2); c.append(l,a); box.append(c);
+  });
+}
+$("#login").addEventListener("submit", async e=>{
+  e.preventDefault(); $("#err").textContent=""; $("#hint").textContent="";
+  const r = await api("POST",{action:"login",email:$("#em").value,password:$("#pw").value});
+  if(r.ok){ $("#pw").value=""; load(); } else $("#err").textContent = r.data.error || "Connexion impossible";
+});
+$("#forgot").onclick = () => { $("#hint").textContent = "Contactez la direction de l’agence pour réinitialiser votre mot de passe."; };
+$("#flt").onchange = draw; $("#ref").onclick = load;
+$("#out").onclick = async()=>{ await api("POST",{action:"logout"}); all=[]; show(false); };
+load();
+</script></body></html>

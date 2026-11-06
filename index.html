@@ -23,6 +23,7 @@ header .wrap{display:flex;align-items:center;justify-content:space-between;heigh
 .logo small{display:block;color:var(--mute);font-size:10px;letter-spacing:3px;margin-top:4px}
 .budget{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 14px;height:40px;font-size:14px;color:var(--mute)}
 .budget input{background:none;border:0;outline:0;width:110px;color:var(--green);font-weight:700;font-size:16px}
+.agentbtn{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;height:40px;padding:0 14px;color:#fff;text-decoration:none;font-weight:600;font-size:13px}.agentbtn:hover{border-color:var(--green)}
 .hero{position:relative;text-align:center;padding:84px 20px 96px;border-bottom:3px solid var(--green);background:linear-gradient(180deg,rgba(14,17,22,.55),rgba(14,17,22,.95)),url(img/hero.jpg) center/cover,radial-gradient(circle at 20% 20%,#1f3a22,#0e1116 70%)}
 .hero h1{font-size:clamp(28px,4.4vw,42px);font-weight:800;line-height:1.15}
 .hero h1 span{color:var(--green)}
@@ -56,6 +57,7 @@ select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padd
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#0b1306;border:0;border-radius:8px;padding:11px 16px;font-weight:700;font-size:13px;cursor:pointer}
 .btn:hover{background:#7fd53a}
 .empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:50px 0}
+.card.over{border-left-color:#e5484d}.card.over .price{color:#ff6b6b}.ko{background:#c93838!important}
 footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--mute);font-size:13px}
 footer b{color:#fff}
 footer i{color:var(--green);font-style:normal}
@@ -99,12 +101,13 @@ form label{font-size:12px;color:var(--mute)}
 
 <header><div class="wrap">
   <div class="logo"><svg><use href="#i-home"/></svg><div><b>DYNASTY <i>8</i></b><small>REAL ESTATE</small></div></div>
-  <label class="budget"><svg><use href="#i-wallet"/></svg>Mon Budget : <span style="color:var(--green);font-weight:700">$</span><input id="budget" inputmode="numeric" autocomplete="off" aria-label="Mon budget"></label>
+  <div style="display:flex;gap:10px;align-items:center"><a class="agentbtn" href="agent.html">Connexion agent</a>
+  <label class="budget"><svg><use href="#i-wallet"/></svg>Mon Budget : <span style="color:var(--green);font-weight:700">$</span><input id="budget" inputmode="numeric" autocomplete="off" aria-label="Mon budget"></label></div>
 </div></header>
 
 <section class="hero">
-  <h1>Trouvez une maison de rêve<br><span>ou du moins abordable.</span></h1>
-  <p>Le leader de l’immobilier résidentiel et commercial à Los Santos et Blaine County.</p>
+  <h1 id="h1"></h1>
+  <p id="sub"></p>
 </section>
 
 <main class="wrap">
@@ -119,7 +122,7 @@ form label{font-size:12px;color:var(--mute)}
   <div class="grid" id="grid"></div>
 </main>
 
-<footer><div class="wrap"><b>DYNASTY <i>8</i></b><br>We’ll find you a home to dream of (or at least afford).<br><br>© 2026 Dynasty 8 Real Estate · Los Santos Extended. Tous droits réservés.</div></footer>
+<footer><div class="wrap"><b>DYNASTY <i>8</i></b><br><span id="f1"></span><br><br><span id="f2"></span></div></footer>
 
 <div class="ov" id="ov" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-name">
   <button class="x" id="x" aria-label="Fermer">✕</button>
@@ -136,12 +139,8 @@ form label{font-size:12px;color:var(--mute)}
   </form>
 </div></div>
 
+<script src="config.js"></script>
 <script>
-/* ============ CONFIGURATION ============ */
-const CONFIG = {
-  webhookUrl: "",          // URL du webhook Discord qui reçoit les demandes d'achat
-  defaultBudget: 1500000
-};
 const CATS = {
   all:{label:"Tout Voir",icon:"i-grid"},
   residence:{label:"Villas & Apparts",icon:"i-home",tag:"RÉSIDENCE"},
@@ -149,33 +148,14 @@ const CATS = {
   entrepot:{label:"Entrepôts",icon:"i-box",tag:"ENTREPÔT"},
   bureau:{label:"Bureaux & QG",icon:"i-bld",tag:"BUREAU"}
 };
-/* Une propriété = un bloc. Pour l'image, dépose le fichier dans le dossier img/ avec le nom indiqué. */
-const PROPERTIES = [
-  {cat:"garage",name:"Garage 2 Places",price:100000,capacity:"2 Véhicules",img:"img/garage-2-places.jpg",
-   desc:"Petit garage de quartier, idéal pour garer vos premiers véhicules à l’abri des intempéries et des regards indiscrets.",
-   features:["Places pour 2 véhicules","Abri couvert","Accès sécurisé"]},
-  {cat:"garage",name:"Garage 6 Places",price:250000,capacity:"6 Véhicules",img:"img/garage-6-places.jpg",
-   desc:"Un garage de taille moyenne offrant un excellent compromis. Parfait pour les amateurs de tuning et les petites collections.",
-   features:["Places pour 6 véhicules","Espace atelier","Accès sécurisé"]},
-  {cat:"garage",name:"Garage 10 Places",price:350000,capacity:"10 Véhicules",img:"img/garage-10-places.jpg",
-   desc:"Grand garage haut de gamme avec sol en résine blanche et éclairage LED moderne. La référence pour tout collectionneur exigeant.",
-   features:["Places pour 10 véhicules","Sol en résine blanche","Éclairage LED"]},
-  {cat:"residence",name:"Chambre",price:100000,capacity:"1 personne",img:"img/chambre.jpg",
-   desc:"Une petite chambre individuelle modeste mais fonctionnelle. L’essentiel pour démarrer votre nouvelle vie à Los Santos.",
-   features:["Couchage individuel","Rangement","Accès indépendant"]},
-  {cat:"residence",name:"Appartement",price:150000,capacity:"1-2 personnes",img:"img/appartement.jpg",
-   desc:"Appartement citadin standard offrant un séjour confortable au cœur de la métropole. Cuisine équipée et salle de bain privative.",
-   features:["Séjour","Cuisine équipée","Salle de bain privative"]},
-  {cat:"residence",name:"Appartement Bordélique",price:200000,capacity:"1-2 personnes",img:"img/appartement-bordelique.jpg",
-   desc:"Un appartement spacieux mais quelque peu négligé. Parfait pour les artistes, les hackers ou toute personne ayant besoin de place et de discrétion.",
-   features:["Grand volume","Poste de travail","Discrétion"]}
-  /* Ajoute ici les autres propriétés (villas, entrepôts, bureaux & QG...) sur le même modèle. */
-];
-
 /* ============ LOGIQUE ============ */
 const $ = s => document.querySelector(s);
 const fmt = n => "$" + Number(n).toLocaleString("fr-FR").replace(/\s/g," ");
 const state = {cat:"all",q:"",sort:"",budget:CONFIG.defaultBudget,current:null};
+document.title = SITE.pageTitle;
+$("#h1").append(SITE.heroTop, document.createElement("br"), Object.assign(document.createElement("span"),{textContent:SITE.heroGreen}));
+$("#sub").textContent = SITE.subtitle; $("#f1").textContent = SITE.footerLine; $("#f2").textContent = SITE.footerCopy;
+const imgUrl = p => /^https?:|^\//.test(p.image) ? p.image : CONFIG.imgBase + p.image;
 try{ const b = parseInt(localStorage.getItem("d8-budget"),10); if(b>0) state.budget=b; }catch(e){}
 
 const tabs = $("#tabs");
@@ -196,7 +176,7 @@ bi.addEventListener("input",()=>{
 });
 
 function pic(p,extra){
-  return `<div class="pic">${extra||""}<img src="${p.img}" alt="${p.name}" loading="lazy"></div>`;
+  return `<div class="pic">${extra||""}<img src="${imgUrl(p)}" alt="${p.name}" loading="lazy"></div>`;
 }
 function hookImages(root){
   root.querySelectorAll(".pic img").forEach(i=>{
@@ -209,13 +189,13 @@ function render(){
   if(state.sort==="asc") list.sort((a,b)=>a.price-b.price);
   if(state.sort==="desc") list.sort((a,b)=>b.price-a.price);
   if(state.sort==="az") list.sort((a,b)=>a.name.localeCompare(b.name,"fr"));
-  const aff = list.filter(p=>p.price<=state.budget).length;
+  const has = state.budget>0, aff = has ? list.filter(p=>p.price<=state.budget).length : 0;
   $("#count").textContent = `${list.length} propriété(s) trouvée(s)`;
   $("#aff").textContent = `${aff} abordable(s)`;
   const g=$("#grid");
   g.innerHTML = list.length ? list.map(p=>{
-    const ok = p.price<=state.budget;
-    return `<article class="card">${pic(p,`<span class="tag">${CATS[p.cat].tag}</span>${ok?`<span class="ok"><svg><use href="#i-check"/></svg>Abordable</span>`:""}`)}
+    const ok = has && p.price<=state.budget, ko = has && !ok;
+    return `<article class="card${ko?" over":""}">${pic(p,`<span class="tag">${CATS[p.cat].tag}</span>${ok?`<span class="ok"><svg><use href="#i-check"/></svg>Abordable</span>`:ko?`<span class="ok ko">Hors budget</span>`:""}`)}
     <div class="body"><h3>${p.name}</h3><p>${p.desc}</p>
     <div class="cap"><svg><use href="#i-size"/></svg>${p.capacity}</div>
     <div class="row"><span class="price">${fmt(p.price)}</span><button class="btn" data-i="${PROPERTIES.indexOf(p)}">Consulter <svg><use href="#i-arrow"/></svg></button></div></div></article>`;
@@ -228,7 +208,7 @@ function openModal(p){
   state.current=p;
   $("#m-pic").outerHTML = pic(p).replace('class="pic"','class="pic" id="m-pic"');
   hookImages($("#ov"));
-  $("#m-tag").textContent=CATS[p.cat].tag; $("#m-name").textContent=p.name; $("#m-price").textContent=fmt(p.price);
+  $("#m-tag").textContent=CATS[p.cat].tag; $("#m-name").textContent=p.name; $("#m-price").textContent=fmt(p.price); $("#m-price").style.color = (state.budget>0&&p.price>state.budget)?"#ff6b6b":"";
   $("#m-cap").textContent=p.capacity; $("#m-desc").textContent=p.desc;
   $("#m-feat").innerHTML=p.features.map(f=>`<li><svg><use href="#i-check"/></svg>${f}</li>`).join("");
   $("#msg").textContent=""; $("#f").reset();
@@ -242,16 +222,10 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 $("#f").addEventListener("submit",async e=>{
   e.preventDefault();
   const p=state.current, msg=$("#msg"), btn=e.target.querySelector("button");
-  if(!CONFIG.webhookUrl){msg.style.color="#e8b04b";msg.textContent="Envoi indisponible pour le moment.";return;}
   btn.disabled=true; msg.style.color="var(--mute)"; msg.textContent="Envoi en cours…";
-  const body={embeds:[{title:"Nouvelle demande d’acquisition",color:7062185,
-    fields:[{name:"Propriété",value:`${p.name} (${fmt(p.price)})`},
-            {name:"Identité",value:$("#f-name").value.slice(0,80),inline:true},
-            {name:"Téléphone",value:$("#f-tel").value.slice(0,30),inline:true},
-            {name:"Notes",value:$("#f-note").value.trim().slice(0,500)||"Aucune"}],
-    timestamp:new Date().toISOString()}]};
+  const body={property:p.name,price:p.price,name:$("#f-name").value,tel:$("#f-tel").value,note:$("#f-note").value};
   try{
-    const r=await fetch(CONFIG.webhookUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const r=await fetch("/api/request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     if(!r.ok) throw new Error(r.status);
     msg.style.color="var(--green)"; msg.textContent="Demande envoyée. Un agent Dynasty 8 vous recontactera.";
     e.target.reset();
